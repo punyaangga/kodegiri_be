@@ -29,7 +29,14 @@ class ApiAuthController extends Controller
         if(Auth::attempt($credential)){
             $user = User::where('email',$credential)->first();
             $token =  $user->createToken('token')->plainTextToken;
-            return new GlobalResources(true,'Login Berhasil',$user,$token);
+            $data = [
+                'id'=>$user->id,
+                'name'=>$user->name,
+                'email'=>$user->email,
+                'phone_number'=>$user->phone_number,
+                'token'=>$token
+            ];
+            return new GlobalResources(true,'Login Berhasil',$data,null);
         }else{
             return response()->json([
                 "success"=> false,
